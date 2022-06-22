@@ -4,7 +4,7 @@ const project = title => {
 
     const getTitle = () => _title;
     const getTodo = title => _todos[title];
-    const getTodosTitles = () => _todos.keys();
+    const getTodosTitles = () => Object.keys(_todos);
 
     const addTodo = (title, todo) => {
         _todos[title] = todo;

@@ -5,7 +5,7 @@ const home = (() => {
     const _proto = Project('home');
 
     const getProject = title => _projects[title];
-    const getProjectsTitles = () => _projects.keys();
+    const getProjectsTitles = () => Object.keys(_projects);
 
     const addProject = (title) => {
         const project = Project(title);
