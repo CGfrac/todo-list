@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    border-right: 1px solid #333;
+}
