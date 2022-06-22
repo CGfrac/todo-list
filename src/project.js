@@ -1,12 +1,10 @@
-const cloneDeep = require('lodash.clonedeep');
-
 const project = title => {
     const _title = title;
     const _todos = {};
 
     const getTitle = () => _title;
     const getTodo = title => _todos[title];
-    const getTodos = () => cloneDeep(_todos);
+    const getTodosTitles = () => _todos.keys();
 
     const addTodo = (title, todo) => {
         _todos[title] = todo;
@@ -19,7 +17,7 @@ const project = title => {
     return {
         getTitle,
         getTodo,
-        getTodos,
+        getTodosTitles,
         addTodo,
         deleteTodo
     }
