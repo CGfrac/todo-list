@@ -1,3 +1,8 @@
+:root {
+    --border-left-width: 3px;
+    --border-left-style: solid;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -9,4 +14,28 @@ body {
 
 .sidebar {
     border-right: 1px solid #333;
+}
+
+.todo {
+    display: flex;
+    gap: 8px;
+}
+
+.low,
+.medium,
+.high {
+    border-left-width: var(--border-left-width);
+    border-left-style: var(--border-left-style);
+}
+
+.low {
+    border-left-color: green;
+}
+
+.medium {
+    border-left-color: orange;
+}
+
+.high {
+    border-left-color: red;
 }
