@@ -2,38 +2,29 @@ const todo = (title, dueDate, priority, description) => {
     let _title = title;
     let _dueDate = dueDate;
     let _priority = priority;
-    let _description = description || '';
+    let _description = description;
 
     const getTitle = () => _title;
-    const getDueDate = () => _dueDate;
-    const getPriority = () => _priority;
-    const getDescription = () => _description;
 
-    const setTitle = title => {
-        _title = title;
-    };
+    const createTodoElement = () => {
+        const element = document.createElement('div');
+        element.classList.add('todo', _priority);
+        element.setAttribute('data-todo', _title);
 
-    const setDueDate = dueDate => {
-        _dueDate = dueDate;
-    };
+        const name = document.createElement('p');
+        name.textContent = _title;
+        element.appendChild(name);
 
-    const setPriority = priority => {
-        _priority = priority;
-    };
+        const date = document.createElement('p');
+        date.textContent = _dueDate;
+        element.appendChild(date);
 
-    const setDescription = description => {
-        _description = description;
+        return element;
     };
 
     return {
         getTitle,
-        getDueDate,
-        getPriority,
-        getDescription,
-        setTitle,
-        setDueDate,
-        setPriority,
-        setDescription
+        createTodoElement
     };
 };
 

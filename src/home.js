@@ -5,6 +5,7 @@ const home = (() => {
     const _proto = Project('home');
 
     const getProject = title => _projects[title];
+    const getProjects = () => Object.values(_projects);
     const getProjectsTitles = () => Object.keys(_projects);
 
     const addProject = (title) => {
@@ -18,6 +19,7 @@ const home = (() => {
 
     return Object.assign({}, _proto, {
         getProject,
+        getProjects,
         getProjectsTitles,
         addProject,
         deleteProject
