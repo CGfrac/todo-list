@@ -35,14 +35,16 @@ function createProjectListener(li) {
     });
 }
 
-function listProjects(project) {
-    const li = document.createElement('li');
-    li.setAttribute('data-project', project);
-    li.textContent = project;
+function listProjects() {
+    for (const project of Home.getProjectsTitles()) {
+        const li = document.createElement('li');
+        li.setAttribute('data-project', project);
+        li.textContent = project;
 
-    createProjectListener(li);
+        createProjectListener(li);
 
-    projectsContainer.appendChild(li);
+        projectsContainer.appendChild(li);
+    }
 }
 
 const homeHeader = document.getElementById('home');
@@ -57,8 +59,5 @@ Home.addProject('Proj2');
 const todo1 = Todo('test', '2nd june', 'low', 'hi');
 Home.addTodo(todo1.getTitle(), todo1);
 
-for (const project of Home.getProjectsTitles()) {
-    listProjects(project);
-}
-
+listProjects();
 listAllTodos();
