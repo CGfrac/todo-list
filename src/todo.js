@@ -13,11 +13,23 @@ const todo = (title, dueDate, priority, description) => {
 
         const name = document.createElement('p');
         name.textContent = _title;
-        element.appendChild(name);
 
         const date = document.createElement('p');
         date.textContent = _dueDate;
-        element.appendChild(date);
+
+        const detailsButton = document.createElement('button');
+        detailsButton.textContent = 'Details';
+        detailsButton.classList.add('todo-details');
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.classList.add('todo-edit');
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('todo-delete');
+
+        element.append(name, date, detailsButton, editButton, deleteButton);
 
         return element;
     };
