@@ -61,3 +61,31 @@ Home.addTodo(todo1.getTitle(), todo1);
 
 listProjects();
 listAllTodos();
+
+function displayAddTodoModal() {
+    const modal = document.querySelector('.modal-edit-add');
+    modal.style.display = 'block';
+}
+
+const addTodoButton = document.querySelector('#add-todo');
+addTodoButton.addEventListener('click', displayAddTodoModal);
+
+function displayAddProjectModal() {
+    const modal = document.querySelector('.modal-add-project');
+    modal.style.display = 'block';
+}
+
+const addProjectButton = document.querySelector('#add-project');
+addProjectButton.addEventListener('click', displayAddProjectModal);
+
+function hideModal(e) {
+    const button = e.target;
+    let parent = button.parent;
+    while (!parent.classList.has('modal')) {
+        parent = parent.parent;
+    }
+    parent.style.display = 'none';
+}
+
+const cancelButtons = document.querySelectorAll('.cancel');
+cancelButtons.forEach(button => button.addEventListener('click', hideModal));
