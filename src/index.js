@@ -126,3 +126,22 @@ function submitTodoForm(e) {
 
 const todoForm = document.getElementById('todo-form');
 todoForm.addEventListener('submit', submitTodoForm);
+
+function submitProjectForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const title = formData.get('project-name');
+    Home.addProject(title);
+
+    listProjects();
+
+    form.reset();
+
+    const modal = document.querySelector('.modal-add-project');
+    hideModal(modal);
+}
+
+const projectForm = document.getElementById('project-form');
+projectForm.addEventListener('submit', submitProjectForm);
