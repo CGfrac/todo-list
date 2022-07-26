@@ -80,9 +80,9 @@ addProjectButton.addEventListener('click', displayAddProjectModal);
 
 function hideModal(e) {
     const button = e.target;
-    let parent = button.parent;
-    while (!parent.classList.has('modal')) {
-        parent = parent.parent;
+    let parent = button.parentElement;
+    while (parent.classList[0] !== ('modal')) {
+        parent = parent.parentElement;
     }
     parent.style.display = 'none';
 }
