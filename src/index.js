@@ -4,6 +4,8 @@ import Todo from './todo.js';
 const projectsContainer = document.getElementById('projects-container');
 const todosContainer = document.getElementById('todos-container');
 
+let currentProject = Home;
+
 function clearTodos() {
     while (todosContainer.lastChild) {
         todosContainer.removeChild(todosContainer.lastChild);
@@ -29,6 +31,7 @@ function createProjectListener(li) {
     li.addEventListener('click', e => {
         const projectTitle = e.target.textContent;
         const project = Home.getProject(projectTitle);
+        currentProject = project;
 
         clearTodos();
         listTodos(project);
@@ -49,6 +52,7 @@ function listProjects() {
 
 const homeHeader = document.getElementById('home');
 homeHeader.addEventListener('click', () => {
+    currentProject = Home;
     clearTodos();
     listAllTodos();
 });
@@ -78,14 +82,47 @@ function displayAddProjectModal() {
 const addProjectButton = document.querySelector('#add-project');
 addProjectButton.addEventListener('click', displayAddProjectModal);
 
-function hideModal(e) {
-    const button = e.target;
+function hideModal(modal) {
+    modal.style.display = 'none';
+}
+
+const cancelButtons = document.querySelectorAll('.cancel');
+cancelButtons.forEach(button => button.addEventListener('click', () => {
     let parent = button.parentElement;
     while (parent.classList[0] !== ('modal')) {
         parent = parent.parentElement;
     }
-    parent.style.display = 'none';
+    hideModal(parent);
+}));
+
+function submitTodoForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const title = formData.get('title');
+
+    const todo = Todo(
+        title,
+        formData.get('due-date'),
+        formData.get('priority'),
+        formData.get('description')
+    );
+
+    currentProject.addTodo(title, todo);
+    clearTodos();
+
+    if (currentProject === Home) {
+        listAllTodos();
+    } else {
+        listTodos(currentProject);
+    }
+
+    form.reset();
+
+    const modal = document.querySelector('.modal-edit-add');
+    hideModal(modal);
 }
 
-const cancelButtons = document.querySelectorAll('.cancel');
-cancelButtons.forEach(button => button.addEventListener('click', hideModal));
+const todoForm = document.getElementById('todo-form');
+todoForm.addEventListener('submit', submitTodoForm);
