@@ -38,6 +38,12 @@ function createProjectListener(li) {
     });
 }
 
+function clearProjects() {
+    while (projectsContainer.lastChild) {
+        projectsContainer.removeChild(projectsContainer.lastChild);
+    }
+}
+
 function listProjects() {
     for (const project of Home.getProjectsTitles()) {
         const li = document.createElement('li');
@@ -135,6 +141,7 @@ function submitProjectForm(e) {
     const title = formData.get('project-name');
     Home.addProject(title);
 
+    clearProjects();
     listProjects();
 
     form.reset();
