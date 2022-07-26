@@ -23,5 +23,61 @@
             <button id="add-todo">Add Todo</button>
         </div>
     </div>
+
+    <div class="modal modal-details">
+        <div></div>
+    </div>
+    <div class="modal modal-edit-add">
+        <div>
+            <form action="">
+                <div>
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" id="title">
+                </div>
+                <div>
+                    <label for="due-date">Due date:</label>
+                    <input type="date" name="due-date" id="due-date">
+                </div>
+                <div>
+                    <p>Priority:</p>
+                    <div>
+                        <input type="radio" name="priority" value="high" id="priority-high">
+                        <label for="priority-high">High</label>
+
+                        <input type="radio" name="priority" value="medium" id="priority-medium">
+                        <label for="priority-medium">Medium</label>
+
+                        <input type="radio" name="priority" value="low" id="priority-low">
+                        <label for="priority-low">Low</label>
+                    </div>
+                </div>
+                <div>
+                    <label for="description">Description:</label>
+                    <textarea name="description" id="description" rows="5"></textarea>
+                </div>
+                <button>Submit</button>
+                <button>Cancel</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal modal-delete">
+        <div>
+            <p>Are you sure?</p>
+            <button>Yes</button>
+            <button>Cancel</button>
+        </div>
+    </div>
+    <div class="modal modal-add-project">
+        <div>
+            <form action="">
+                <div>
+                    <label for="project-name">Project name:</label>
+                    <input type="text" name="project-name" id="project-name">
+                </div>
+                <button>Submit</button>
+                <button>Cancel</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
