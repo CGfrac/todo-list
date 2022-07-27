@@ -6,10 +6,12 @@ const todo = (title, dueDate, priority, description) => {
 
     const getTitle = () => _title;
 
-    const createTodoElement = () => {
+    const createTodoElement = (projectId, todoId) => {
+        const dataId = `${projectId}-${todoId}`
+
         const element = document.createElement('div');
         element.classList.add('todo', _priority);
-        element.setAttribute('data-todo', _title);
+        element.setAttribute('data-id', dataId);
 
         const name = document.createElement('p');
         name.textContent = _title;

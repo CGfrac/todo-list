@@ -13,8 +13,8 @@ function clearTodos() {
 }
 
 function listTodos(project) {
-    for (const todo of project.getTodos()) {
-        const todoElement = todo.createTodoElement();
+    for (const [id, todo] of project.getTodos()) {
+        const todoElement = todo.createTodoElement(project.getId(), id);
         todosContainer.appendChild(todoElement);
     }
 }

@@ -7,7 +7,7 @@ const project = (title, id) => {
     const getTitle = () => _title;
     const getId = () => _id;
     const getTodo = id => _todos[id];
-    const getTodos = () => Object.values(_todos);
+    const getTodos = () => Object.entries(_todos);
 
 
     const addTodo = todo => {
