@@ -14,6 +14,44 @@ const DOM = (() => {
         listAllTodos();
     });
 
+    const _createTodoElement = (projectId, todoId) => {
+        let todo;
+
+        if (_currentProject === Home) {
+            todo = Home.getTodo(todoId);
+        } else {
+            todo = Home.getProject(projectId).getTodo(todoId);
+        }
+
+        const element = document.createElement('div');
+        element.classList.add('todo', todo.getPriority());
+
+        const dataId = `${projectId}-${todoId}`;
+        element.setAttribute('data-id', dataId);
+
+        const name = document.createElement('p');
+        name.textContent = todo.getTitle();
+
+        const date = document.createElement('p');
+        date.textContent = todo.getDueDate();
+
+        const detailsButton = document.createElement('button');
+        detailsButton.textContent = 'Details';
+        detailsButton.classList.add('todo-details');
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.classList.add('todo-edit');
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('todo-delete');
+
+        element.append(name, date, detailsButton, editButton, deleteButton);
+
+        return element;
+    };
+
     const _clearTodos = () => {
         while (_todosContainer.lastChild) {
             _todosContainer.removeChild(_todosContainer.lastChild);
@@ -22,7 +60,7 @@ const DOM = (() => {
 
     const _listTodos = project => {
         for (const [id, todo] of project.getTodos()) {
-            const todoElement = todo.createTodoElement(project.getId(), id);
+            const todoElement = _createTodoElement(project.getId(), id);
             _todosContainer.appendChild(todoElement);
         }
     };
