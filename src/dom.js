@@ -7,22 +7,17 @@ const DOM = (() => {
 
     let _currentProject = Home;
 
-    const _homeHeader = document.getElementById('home');
-    _homeHeader.addEventListener('click', () => {
-        _currentProject = Home;
-        _clearTodos();
-        listAllTodos();
-    });
+    const _getTodo = (projectId, todoId) => {
+        if (_currentProject === Home) {
+            return Home.getTodo(todoId);
+        } else {
+            return Home.getProject(projectId).getTodo(todoId);
+        }
+    }
 
     const _displayDetailsModal = e => {
         const [projectId, todoId] = e.target.parentElement.getAttribute('data-id').split('-');
-        let todo;
-
-        if (_currentProject === Home) {
-            todo = Home.getTodo(todoId);
-        } else {
-            todo = Home.getProject(projectId).getTodo(todoId);
-        }
+        const todo = _getTodo(projectId, todoId);
 
         const detailsModalDiv = document.querySelector('.modal-details > div');
         const editButton = document.getElementById('details-edit');
@@ -47,13 +42,7 @@ const DOM = (() => {
     };
 
     const _createTodoElement = (projectId, todoId) => {
-        let todo;
-
-        if (_currentProject === Home) {
-            todo = Home.getTodo(todoId);
-        } else {
-            todo = Home.getProject(projectId).getTodo(todoId);
-        }
+        const todo = _getTodo(projectId, todoId);
 
         const element = document.createElement('div');
         element.classList.add('todo', todo.getPriority());
@@ -213,6 +202,13 @@ const DOM = (() => {
 
     const projectForm = document.getElementById('project-form');
     projectForm.addEventListener('submit', submitProjectForm);
+
+    const _homeHeader = document.getElementById('home');
+    _homeHeader.addEventListener('click', () => {
+        _currentProject = Home;
+        _clearTodos();
+        listAllTodos();
+    });
 
     return {
         Home,

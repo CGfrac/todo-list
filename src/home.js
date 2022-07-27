@@ -1,8 +1,8 @@
 import Project from './project.js';
 
 const home = (() => {
-    const _projects = {};
     const _proto = Project('home', 0);
+    const _projects = {};
     let _nextProjectId = 1;
 
     const getProject = id => _projects[id];
