@@ -106,16 +106,14 @@ function submitTodoForm(e) {
     const form = e.target;
     const formData = new FormData(form);
 
-    const title = formData.get('title');
-
     const todo = Todo(
-        title,
+        formData.get('title'),
         formData.get('due-date'),
         formData.get('priority'),
         formData.get('description')
     );
 
-    currentProject.addTodo(title, todo);
+    currentProject.addTodo(todo);
     clearTodos();
 
     if (currentProject === Home) {
