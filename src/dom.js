@@ -15,30 +15,41 @@ const DOM = (() => {
         }
     }
 
+    const _clearDetailsModal = () => {
+        const detailsModalDiv = document.querySelector('.modal-details').firstElementChild;
+        const editButton = document.getElementById('details-edit');
+
+        while (detailsModalDiv.firstElementChild !== editButton) {
+            detailsModalDiv.removeChild(detailsModalDiv.firstElementChild);
+        }
+    };
+
     const _displayDetailsModal = e => {
+        _clearDetailsModal();
+
         const [projectId, todoId] = e.target.parentElement.getAttribute('data-id').split('-');
         const todo = _getTodo(projectId, todoId);
 
-        const detailsModalDiv = document.querySelector('.modal-details > div');
-        const editButton = document.getElementById('details-edit');
-
         const title = document.createElement('p');
         title.textContent = `Title: ${todo.getTitle()}`;
-        detailsModalDiv.insertBefore(title, editButton);
 
         const dueDate = document.createElement('p');
         dueDate.textContent = `Due date: ${todo.getDueDate()}`;
-        detailsModalDiv.insertBefore(dueDate, editButton);
 
         const priority = document.createElement('p');
         priority.textContent = `Priority: ${todo.getPriority()}`;
-        detailsModalDiv.insertBefore(priority, editButton);
 
         const description = document.createElement('p');
         description.textContent = `Description: ${todo.getDescription()}`;
-        detailsModalDiv.insertBefore(description, editButton);
 
-        detailsModalDiv.parentElement.style.display = 'block';
+        const detailsElement = document.createElement('div');
+        detailsElement.append(title, dueDate, priority, description);
+
+        const detailsModal = document.querySelector('.modal-details');
+        const editButton = document.getElementById('details-edit');
+        detailsModal.firstElementChild.insertBefore(detailsElement, editButton);
+
+        detailsModal.style.display = 'block';
     };
 
     const _createTodoElement = (projectId, todoId) => {
