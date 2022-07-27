@@ -10,7 +10,7 @@ const project = (title, id) => {
     const getTodos = () => Object.values(_todos);
 
 
-    const addTodo = (todo) => {
+    const addTodo = todo => {
         _todos[_nextTodoId] = todo;
         _nextTodoId++;
     }

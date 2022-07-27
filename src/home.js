@@ -6,13 +6,7 @@ const home = (() => {
     let _nextProjectId = 1;
 
     const getProject = id => _projects[id];
-    const getProjectsTitles = () => {
-        const titles = [];
-        for (const project of Object.values(_projects)) {
-            titles.push(project.getTitle());
-        }
-        return titles;
-    };
+    const getProjects = () => Object.values(_projects);
 
     const addProject = (title) => {
         const project = Project(title, _nextProjectId);
@@ -26,7 +20,7 @@ const home = (() => {
 
     return Object.assign({}, _proto, {
         getProject,
-        getProjectsTitles,
+        getProjects,
         addProject,
         deleteProject
     });

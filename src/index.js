@@ -29,8 +29,8 @@ function listAllTodos() {
 
 function createProjectListener(li) {
     li.addEventListener('click', e => {
-        const projectTitle = e.target.textContent;
-        const project = Home.getProject(projectTitle);
+        const projectId = e.target.getAttribute('data-project-id');
+        const project = Home.getProject(projectId);
         currentProject = project;
 
         clearTodos();
@@ -45,10 +45,10 @@ function clearProjects() {
 }
 
 function listProjects() {
-    for (const project of Home.getProjectsTitles()) {
+    for (const project of Home.getProjects()) {
         const li = document.createElement('li');
-        li.setAttribute('data-project', project);
-        li.textContent = project;
+        li.setAttribute('data-project-id', project.getId());
+        li.textContent = project.getTitle();
 
         createProjectListener(li);
 
@@ -67,7 +67,7 @@ Home.addProject('Test');
 Home.addProject('Proj2');
 
 const todo1 = Todo('test', '2nd june', 'low', 'hi');
-Home.addTodo(todo1.getTitle(), todo1);
+Home.addTodo(todo1);
 
 listProjects();
 listAllTodos();
