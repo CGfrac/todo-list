@@ -1,22 +1,27 @@
-const project = title => {
+const project = (title, id) => {
     const _title = title;
+    const _id = id;
     const _todos = {};
+    let _nextTodoId = 0;
 
     const getTitle = () => _title;
-    const getTodo = title => _todos[title];
+    const getId = () => _id;
+    const getTodo = id => _todos[id];
     const getTodos = () => Object.values(_todos);
 
 
-    const addTodo = (title, todo) => {
-        _todos[title] = todo;
+    const addTodo = (todo) => {
+        _todos[_nextTodoId] = todo;
+        _nextTodoId++;
     }
 
-    const deleteTodo = title => {
-        delete _todos[title];
+    const deleteTodo = id => {
+        delete _todos[id];
     }
 
     return {
         getTitle,
+        getId,
         getTodo,
         getTodos,
         addTodo,
