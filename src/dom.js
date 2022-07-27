@@ -14,6 +14,38 @@ const DOM = (() => {
         listAllTodos();
     });
 
+    const _displayDetailsModal = e => {
+        const [projectId, todoId] = e.target.parentElement.getAttribute('data-id').split('-');
+        let todo;
+
+        if (_currentProject === Home) {
+            todo = Home.getTodo(todoId);
+        } else {
+            todo = Home.getProject(projectId).getTodo(todoId);
+        }
+
+        const detailsModalDiv = document.querySelector('.modal-details > div');
+        const editButton = document.getElementById('details-edit');
+
+        const title = document.createElement('p');
+        title.textContent = `Title: ${todo.getTitle()}`;
+        detailsModalDiv.insertBefore(title, editButton);
+
+        const dueDate = document.createElement('p');
+        dueDate.textContent = `Due date: ${todo.getDueDate()}`;
+        detailsModalDiv.insertBefore(dueDate, editButton);
+
+        const priority = document.createElement('p');
+        priority.textContent = `Priority: ${todo.getPriority()}`;
+        detailsModalDiv.insertBefore(priority, editButton);
+
+        const description = document.createElement('p');
+        description.textContent = `Description: ${todo.getDescription()}`;
+        detailsModalDiv.insertBefore(description, editButton);
+
+        detailsModalDiv.parentElement.style.display = 'block';
+    };
+
     const _createTodoElement = (projectId, todoId) => {
         let todo;
 
@@ -38,6 +70,7 @@ const DOM = (() => {
         const detailsButton = document.createElement('button');
         detailsButton.textContent = 'Details';
         detailsButton.classList.add('todo-details');
+        detailsButton.addEventListener('click', _displayDetailsModal);
 
         const editButton = document.createElement('button');
         editButton.textContent = 'Edit';
