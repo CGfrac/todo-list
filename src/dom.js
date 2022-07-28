@@ -24,10 +24,14 @@ const DOM = (() => {
         }
     };
 
+    const _parseDataId = target => {
+        return target.parentElement.getAttribute('data-id').split('-');
+    };
+
     const _displayDetailsModal = e => {
         _clearDetailsModal();
 
-        const [projectId, todoId] = e.target.parentElement.getAttribute('data-id').split('-');
+        const [projectId, todoId] = _parseDataId(e.target);
         const todo = _getTodo(projectId, todoId);
 
         const title = document.createElement('p');
@@ -75,6 +79,7 @@ const DOM = (() => {
         const editButton = document.createElement('button');
         editButton.textContent = 'Edit';
         editButton.classList.add('todo-edit');
+        editButton.addEventListener('click', _editTodo);
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
@@ -135,13 +140,13 @@ const DOM = (() => {
         }
     };
 
-    const _displayAddTodoModal = () => {
+    const _displayAddEditTodoModal = () => {
         const modal = document.querySelector('.modal-edit-add');
         modal.style.display = 'block';
     };
 
     const addTodoButton = document.querySelector('#add-todo');
-    addTodoButton.addEventListener('click', _displayAddTodoModal);
+    addTodoButton.addEventListener('click', _displayAddEditTodoModal);
 
     const _displayAddProjectModal = () => {
         const modal = document.querySelector('.modal-add-project');
@@ -213,6 +218,31 @@ const DOM = (() => {
 
     const projectForm = document.getElementById('project-form');
     projectForm.addEventListener('submit', submitProjectForm);
+
+    const _editTodo = e => {
+        const [projectId, todoId] = _parseDataId(e.target);
+        const todo = _getTodo(projectId, todoId);
+
+        document.getElementById('title').value = todo.getTitle();
+        document.getElementById('due-date').value = todo.getDueDate();
+
+        const priority = todo.getPriority();
+
+        switch (priority) {
+            case 'high':
+                document.getElementById('priority-high').checked = true;
+                break;
+            case 'medium':
+                document.getElementById('priority-medium').checked = true;
+                break;
+            default:
+                document.getElementById('priority-low').checked = true;
+        }
+
+        document.getElementById('description').value = todo.getDescription();
+
+        _displayAddEditTodoModal();
+    };
 
     const _homeHeader = document.getElementById('home');
     _homeHeader.addEventListener('click', () => {
