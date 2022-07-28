@@ -94,7 +94,6 @@ const DOM = (() => {
         detailsButton.textContent = 'Details';
         detailsButton.classList.add('todo-details');
         detailsButton.addEventListener('click', e => {
-            const [detailsProjectId, detailsTodoId] = _parseDataId(e.target.parentElement);
             _detailsTarget = todo;
             _displayDetailsModal()
         });
@@ -103,7 +102,6 @@ const DOM = (() => {
         editButton.textContent = 'Edit';
         editButton.classList.add('todo-edit');
         editButton.addEventListener('click', e => {
-            const [editProjectId, editTodoId] = _parseDataId(e.target.parentElement);
             _isEditFromDetails = false;
             _editTarget = todo;
             _editTodo();
