@@ -8,8 +8,10 @@ const DOM = (() => {
     let _currentProject = Home;
     let _isEdit = false;
     let _isEditFromDetails = false;
+    let _isDeleteTargetTodo = false;
     let _editTarget;
     let _detailsTarget;
+    let _deleteTodoTarget;
 
     const _clearDetailsModal = () => {
         const detailsModalDiv = document.querySelector('.modal-details').firstElementChild;
@@ -53,8 +55,22 @@ const DOM = (() => {
         _editTarget = _detailsTarget;
     };
 
-    const _deleteTodo = e => {
-        const [projectId, todoId] = _parseDataId(e.target.parentElement);
+    const _deleteProject = () => {
+        Home.deleteProject(_currentProject.getId());
+
+        const main = document.querySelector('.main');
+        const deleteProjectButton = main.lastElementChild;
+        main.removeChild(deleteProjectButton);
+
+        _currentProject = Home;
+        _clearTodos();
+        listAllTodos();
+        _clearProjects();
+        listProjects();
+    };
+
+    const _deleteTodo = () => {
+        const [projectId, todoId] = _parseDataId(_deleteTodoTarget);
 
         _clearTodos()
 
@@ -65,6 +81,11 @@ const DOM = (() => {
             Home.getProject(projectId).deleteTodo(todoId);
             _listTodos(projectId);
         }
+    };
+
+    const _displayConfirmDeleteModal = () => {
+        const _deleteModal = document.querySelector('.modal-delete');
+        _deleteModal.style.display = 'block';
     };
 
     const _createTodoElement = (projectId, todoId, todo) => {
@@ -85,7 +106,7 @@ const DOM = (() => {
         detailsButton.classList.add('todo-details');
         detailsButton.addEventListener('click', e => {
             _detailsTarget = todo;
-            _displayDetailsModal()
+            _displayDetailsModal();
         });
 
         const editButton = document.createElement('button');
@@ -100,7 +121,11 @@ const DOM = (() => {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.classList.add('todo-delete');
-        deleteButton.addEventListener('click', _deleteTodo);
+        deleteButton.addEventListener('click', () => {
+            _isDeleteTargetTodo = true;
+            _deleteTodoTarget = element;
+            _displayConfirmDeleteModal();
+        });
 
         element.append(name, date, detailsButton, editButton, deleteButton);
 
@@ -113,10 +138,27 @@ const DOM = (() => {
         }
     };
 
+    const _createDeleteProjectButton = () => {
+        const deleteProjectButton = document.createElement('button');
+        deleteProjectButton.textContent = 'Delete Project';
+
+        const main = document.querySelector('.main');
+
+        deleteProjectButton.addEventListener('click', () => {
+            _isDeleteTargetTodo = false;
+            _displayConfirmDeleteModal();
+        });
+
+        main.appendChild(deleteProjectButton);
+    };
+
     const _listTodos = project => {
         for (const [id, todo] of project.getTodos()) {
             const todoElement = _createTodoElement(project.getId(), id, todo);
             _todosContainer.appendChild(todoElement);
+        }
+        if (_currentProject !== Home) {
+            _createDeleteProjectButton();
         }
     };
 
@@ -279,6 +321,16 @@ const DOM = (() => {
     _detailsModalEditButton.addEventListener('click', e => {
         _isEditFromDetails = true;
         _editTodo();
+    });
+
+    const _confirmDeleteButton = document.getElementById('confirm-delete');
+    _confirmDeleteButton.addEventListener('click', e => {
+        if (_isDeleteTargetTodo) {
+            _deleteTodo();
+        } else {
+            _deleteProject();
+        }
+        _hideModal(_confirmDeleteButton.parentElement.parentElement);
     });
 
     const _projectForm = document.getElementById('project-form');
