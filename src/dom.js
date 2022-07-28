@@ -6,6 +6,10 @@ const DOM = (() => {
     const _todosContainer = document.getElementById('todos-container');
 
     let _currentProject = Home;
+    let _isEdit = false;
+    let _isEditFromDetails = false;
+    let _editTarget;
+    let _detailsTarget;
 
     const _getTodo = (projectId, todoId) => {
         if (_currentProject === Home) {
@@ -28,23 +32,20 @@ const DOM = (() => {
         return target.parentElement.getAttribute('data-id').split('-');
     };
 
-    const _displayDetailsModal = e => {
+    const _displayDetailsModal = () => {
         _clearDetailsModal();
 
-        const [projectId, todoId] = _parseDataId(e.target);
-        const todo = _getTodo(projectId, todoId);
-
         const title = document.createElement('p');
-        title.textContent = `Title: ${todo.getTitle()}`;
+        title.textContent = `Title: ${_detailsTarget.getTitle()}`;
 
         const dueDate = document.createElement('p');
-        dueDate.textContent = `Due date: ${todo.getDueDate()}`;
+        dueDate.textContent = `Due date: ${_detailsTarget.getDueDate()}`;
 
         const priority = document.createElement('p');
-        priority.textContent = `Priority: ${todo.getPriority()}`;
+        priority.textContent = `Priority: ${_detailsTarget.getPriority()}`;
 
         const description = document.createElement('p');
-        description.textContent = `Description: ${todo.getDescription()}`;
+        description.textContent = `Description: ${_detailsTarget.getDescription()}`;
 
         const detailsElement = document.createElement('div');
         detailsElement.append(title, dueDate, priority, description);
@@ -53,6 +54,7 @@ const DOM = (() => {
         const editButton = document.getElementById('details-edit');
         detailsModal.firstElementChild.insertBefore(detailsElement, editButton);
 
+        _editTarget = _detailsTarget;
         detailsModal.style.display = 'block';
     };
 
@@ -74,12 +76,21 @@ const DOM = (() => {
         const detailsButton = document.createElement('button');
         detailsButton.textContent = 'Details';
         detailsButton.classList.add('todo-details');
-        detailsButton.addEventListener('click', _displayDetailsModal);
+        detailsButton.addEventListener('click', e => {
+            const [detailsProjectId, detailsTodoId] = _parseDataId(e.target);
+            _detailsTarget = todo;
+            _displayDetailsModal()
+        });
 
         const editButton = document.createElement('button');
         editButton.textContent = 'Edit';
         editButton.classList.add('todo-edit');
-        editButton.addEventListener('click', _editTodo);
+        editButton.addEventListener('click', e => {
+            const [editProjectId, editTodoId] = _parseDataId(e.target);
+            _isEditFromDetails = false;
+            _editTarget = todo;
+            _editTodo();
+        });
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
@@ -145,8 +156,6 @@ const DOM = (() => {
         modal.style.display = 'block';
     };
 
-    let _isEdit = false;
-
     const _addTodoButton = document.querySelector('#add-todo');
     _addTodoButton.addEventListener('click', () => {
         _isEdit = false;
@@ -174,8 +183,6 @@ const DOM = (() => {
         _hideModal(parent);
     }));
 
-    let _editTarget;
-
     const _submitTodoForm = e => {
         e.preventDefault();
         const form = e.target;
@@ -195,6 +202,10 @@ const DOM = (() => {
             _editTarget.setDueDate(formData.get('due-date'));
             _editTarget.setPriority(formData.get('priority'));
             _editTarget.setDescription(formData.get('description'));
+
+            if (_isEditFromDetails) {
+                _displayDetailsModal();
+            }
         }
 
         _clearTodos();
@@ -234,14 +245,11 @@ const DOM = (() => {
     const _projectForm = document.getElementById('project-form');
     _projectForm.addEventListener('submit', _submitProjectForm);
 
-    const _editTodo = e => {
-        const [projectId, todoId] = _parseDataId(e.target);
-        const todo = _getTodo(projectId, todoId);
+    const _editTodo = () => {
+        document.getElementById('title').value = _editTarget.getTitle();
+        document.getElementById('due-date').value = _editTarget.getDueDate();
 
-        document.getElementById('title').value = todo.getTitle();
-        document.getElementById('due-date').value = todo.getDueDate();
-
-        const priority = todo.getPriority();
+        const priority = _editTarget.getPriority();
 
         switch (priority) {
             case 'high':
@@ -254,10 +262,9 @@ const DOM = (() => {
                 document.getElementById('priority-low').checked = true;
         }
 
-        document.getElementById('description').value = todo.getDescription();
+        document.getElementById('description').value = _editTarget.getDescription();
 
         _isEdit = true;
-        _editTarget = todo;
         _displayAddEditTodoModal();
     };
 
@@ -266,6 +273,12 @@ const DOM = (() => {
         _currentProject = Home;
         _clearTodos();
         listAllTodos();
+    });
+
+    const _detailsModalEditButton = document.getElementById('details-edit');
+    _detailsModalEditButton.addEventListener('click', e => {
+        _isEditFromDetails = true;
+        _editTodo();
     });
 
     return {
