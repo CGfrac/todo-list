@@ -11,14 +11,6 @@ const DOM = (() => {
     let _editTarget;
     let _detailsTarget;
 
-    const _getTodo = (projectId, todoId) => {
-        if (_currentProject === Home) {
-            return Home.getTodo(todoId);
-        } else {
-            return Home.getProject(projectId).getTodo(todoId);
-        }
-    }
-
     const _clearDetailsModal = () => {
         const detailsModalDiv = document.querySelector('.modal-details').firstElementChild;
         const editButton = document.getElementById('details-edit');
@@ -75,9 +67,7 @@ const DOM = (() => {
         }
     };
 
-    const _createTodoElement = (projectId, todoId) => {
-        const todo = _getTodo(projectId, todoId);
-
+    const _createTodoElement = (projectId, todoId, todo) => {
         const element = document.createElement('div');
         element.classList.add('todo', todo.getPriority());
 
@@ -125,7 +115,7 @@ const DOM = (() => {
 
     const _listTodos = project => {
         for (const [id, todo] of project.getTodos()) {
-            const todoElement = _createTodoElement(project.getId(), id);
+            const todoElement = _createTodoElement(project.getId(), id, todo);
             _todosContainer.appendChild(todoElement);
         }
     };
