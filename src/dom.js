@@ -22,10 +22,6 @@ const DOM = (() => {
         }
     };
 
-    const _parseDataId = target => {
-        return target.getAttribute('data-id').split('-');
-    };
-
     const _createDetailsPara = (prefix, getter) => {
         const para = document.createElement('p');
         para.textContent = `${prefix}: ${getter()}`;
@@ -55,18 +51,27 @@ const DOM = (() => {
         _editTarget = _detailsTarget;
     };
 
-    const _deleteProject = () => {
-        Home.deleteProject(_currentProject.getId());
+    const _displayConfirmDeleteModal = () => {
+        const _deleteModal = document.querySelector('.modal-delete');
+        _deleteModal.style.display = 'block';
+    };
 
-        const main = document.querySelector('.main');
-        const deleteProjectButton = main.lastElementChild;
-        main.removeChild(deleteProjectButton);
+    const _displayAddEditTodoModal = () => {
+        const modal = document.querySelector('.modal-edit-add');
+        modal.style.display = 'block';
+    };
 
-        _currentProject = Home;
-        _clearTodos();
-        listAllTodos();
-        _clearProjects();
-        listProjects();
+    const _displayAddProjectModal = () => {
+        const modal = document.querySelector('.modal-add-project');
+        modal.style.display = 'block';
+    };
+
+    const _hideModal = modal => {
+        modal.style.display = 'none';
+    };
+
+    const _parseDataId = target => {
+        return target.getAttribute('data-id').split('-');
     };
 
     const _deleteTodo = () => {
@@ -83,9 +88,33 @@ const DOM = (() => {
         }
     };
 
-    const _displayConfirmDeleteModal = () => {
-        const _deleteModal = document.querySelector('.modal-delete');
-        _deleteModal.style.display = 'block';
+    const _clearTodos = () => {
+        while (_todosContainer.lastChild) {
+            _todosContainer.removeChild(_todosContainer.lastChild);
+        }
+    };
+
+    const _editTodo = () => {
+        document.getElementById('title').value = _editTarget.getTitle();
+        document.getElementById('due-date').value = _editTarget.getDueDate();
+
+        const priority = _editTarget.getPriority();
+
+        switch (priority) {
+            case 'high':
+                document.getElementById('priority-high').checked = true;
+                break;
+            case 'medium':
+                document.getElementById('priority-medium').checked = true;
+                break;
+            default:
+                document.getElementById('priority-low').checked = true;
+        }
+
+        document.getElementById('description').value = _editTarget.getDescription();
+
+        _isEdit = true;
+        _displayAddEditTodoModal();
     };
 
     const _createTodoElement = (projectId, todoId, todo) => {
@@ -132,12 +161,6 @@ const DOM = (() => {
         return element;
     };
 
-    const _clearTodos = () => {
-        while (_todosContainer.lastChild) {
-            _todosContainer.removeChild(_todosContainer.lastChild);
-        }
-    };
-
     const _createDeleteProjectButton = () => {
         const deleteProjectButton = document.createElement('button');
         deleteProjectButton.textContent = 'Delete Project';
@@ -181,12 +204,6 @@ const DOM = (() => {
         });
     };
 
-    const _clearProjects = () => {
-        while (_projectsContainer.lastChild) {
-            _projectsContainer.removeChild(_projectsContainer.lastChild);
-        }
-    };
-
     const listProjects = () => {
         for (const project of Home.getProjects()) {
             const li = document.createElement('li');
@@ -199,18 +216,24 @@ const DOM = (() => {
         }
     };
 
-    const _displayAddEditTodoModal = () => {
-        const modal = document.querySelector('.modal-edit-add');
-        modal.style.display = 'block';
+    const _clearProjects = () => {
+        while (_projectsContainer.lastChild) {
+            _projectsContainer.removeChild(_projectsContainer.lastChild);
+        }
     };
 
-    const _displayAddProjectModal = () => {
-        const modal = document.querySelector('.modal-add-project');
-        modal.style.display = 'block';
-    };
+    const _deleteProject = () => {
+        Home.deleteProject(_currentProject.getId());
 
-    const _hideModal = modal => {
-        modal.style.display = 'none';
+        const main = document.querySelector('.main');
+        const deleteProjectButton = main.lastElementChild;
+        main.removeChild(deleteProjectButton);
+
+        _currentProject = Home;
+        _clearTodos();
+        listAllTodos();
+        _clearProjects();
+        listProjects();
     };
 
     const _submitTodoForm = e => {
@@ -267,29 +290,6 @@ const DOM = (() => {
 
         const modal = document.querySelector('.modal-add-project');
         _hideModal(modal);
-    };
-
-    const _editTodo = () => {
-        document.getElementById('title').value = _editTarget.getTitle();
-        document.getElementById('due-date').value = _editTarget.getDueDate();
-
-        const priority = _editTarget.getPriority();
-
-        switch (priority) {
-            case 'high':
-                document.getElementById('priority-high').checked = true;
-                break;
-            case 'medium':
-                document.getElementById('priority-medium').checked = true;
-                break;
-            default:
-                document.getElementById('priority-low').checked = true;
-        }
-
-        document.getElementById('description').value = _editTarget.getDescription();
-
-        _isEdit = true;
-        _displayAddEditTodoModal();
     };
 
     const _homeHeader = document.getElementById('home');
