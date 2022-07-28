@@ -159,32 +159,14 @@ const DOM = (() => {
         modal.style.display = 'block';
     };
 
-    const _addTodoButton = document.querySelector('#add-todo');
-    _addTodoButton.addEventListener('click', () => {
-        _isEdit = false;
-        _displayAddEditTodoModal();
-    });
-
     const _displayAddProjectModal = () => {
         const modal = document.querySelector('.modal-add-project');
         modal.style.display = 'block';
     };
 
-    const _addProjectButton = document.querySelector('#add-project');
-    _addProjectButton.addEventListener('click', _displayAddProjectModal);
-
     const _hideModal = modal => {
         modal.style.display = 'none';
     };
-
-    const _cancelButtons = document.querySelectorAll('.cancel');
-    _cancelButtons.forEach(button => button.addEventListener('click', () => {
-        let parent = button.parentElement;
-        while (parent.classList[0] !== ('modal')) {
-            parent = parent.parentElement;
-        }
-        _hideModal(parent);
-    }));
 
     const _submitTodoForm = e => {
         e.preventDefault();
@@ -225,9 +207,6 @@ const DOM = (() => {
         _hideModal(modal);
     };
 
-    const _todoForm = document.getElementById('todo-form');
-    _todoForm.addEventListener('submit', _submitTodoForm);
-
     const _submitProjectForm = e => {
         e.preventDefault();
         const form = e.target;
@@ -244,9 +223,6 @@ const DOM = (() => {
         const modal = document.querySelector('.modal-add-project');
         _hideModal(modal);
     };
-
-    const _projectForm = document.getElementById('project-form');
-    _projectForm.addEventListener('submit', _submitProjectForm);
 
     const _editTodo = () => {
         document.getElementById('title').value = _editTarget.getTitle();
@@ -278,11 +254,35 @@ const DOM = (() => {
         listAllTodos();
     });
 
+    const _cancelButtons = document.querySelectorAll('.cancel');
+    _cancelButtons.forEach(button => button.addEventListener('click', () => {
+        let parent = button.parentElement;
+        while (parent.classList[0] !== ('modal')) {
+            parent = parent.parentElement;
+        }
+        _hideModal(parent);
+    }));
+
+    const _addTodoButton = document.querySelector('#add-todo');
+    _addTodoButton.addEventListener('click', () => {
+        _isEdit = false;
+        _displayAddEditTodoModal();
+    });
+
+    const _addProjectButton = document.querySelector('#add-project');
+    _addProjectButton.addEventListener('click', _displayAddProjectModal);
+
     const _detailsModalEditButton = document.getElementById('details-edit');
     _detailsModalEditButton.addEventListener('click', e => {
         _isEditFromDetails = true;
         _editTodo();
     });
+
+    const _projectForm = document.getElementById('project-form');
+    _projectForm.addEventListener('submit', _submitProjectForm);
+
+    const _todoForm = document.getElementById('todo-form');
+    _todoForm.addEventListener('submit', _submitTodoForm);
 
     return {
         Home,
