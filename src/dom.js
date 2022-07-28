@@ -29,7 +29,7 @@ const DOM = (() => {
     };
 
     const _parseDataId = target => {
-        return target.parentElement.getAttribute('data-id').split('-');
+        return target.getAttribute('data-id').split('-');
     };
 
     const _createDetailsPara = (prefix, getter) => {
@@ -61,6 +61,20 @@ const DOM = (() => {
         _editTarget = _detailsTarget;
     };
 
+    const _deleteTodo = e => {
+        const [projectId, todoId] = _parseDataId(e.target.parentElement);
+
+        _clearTodos()
+
+        if (_currentProject === Home) {
+            Home.deleteTodo(todoId);
+            listAllTodos();
+        } else {
+            Home.getProject(projectId).deleteTodo(todoId);
+            _listTodos(projectId);
+        }
+    };
+
     const _createTodoElement = (projectId, todoId) => {
         const todo = _getTodo(projectId, todoId);
 
@@ -80,7 +94,7 @@ const DOM = (() => {
         detailsButton.textContent = 'Details';
         detailsButton.classList.add('todo-details');
         detailsButton.addEventListener('click', e => {
-            const [detailsProjectId, detailsTodoId] = _parseDataId(e.target);
+            const [detailsProjectId, detailsTodoId] = _parseDataId(e.target.parentElement);
             _detailsTarget = todo;
             _displayDetailsModal()
         });
@@ -89,7 +103,7 @@ const DOM = (() => {
         editButton.textContent = 'Edit';
         editButton.classList.add('todo-edit');
         editButton.addEventListener('click', e => {
-            const [editProjectId, editTodoId] = _parseDataId(e.target);
+            const [editProjectId, editTodoId] = _parseDataId(e.target.parentElement);
             _isEditFromDetails = false;
             _editTarget = todo;
             _editTodo();
@@ -98,6 +112,7 @@ const DOM = (() => {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.classList.add('todo-delete');
+        deleteButton.addEventListener('click', _deleteTodo);
 
         element.append(name, date, detailsButton, editButton, deleteButton);
 
