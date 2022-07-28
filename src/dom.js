@@ -145,16 +145,21 @@ const DOM = (() => {
         modal.style.display = 'block';
     };
 
+    let _isEdit = false;
+
     const _addTodoButton = document.querySelector('#add-todo');
-    _addTodoButton.addEventListener('click', _displayAddEditTodoModal);
+    _addTodoButton.addEventListener('click', () => {
+        _isEdit = false;
+        _displayAddEditTodoModal();
+    });
 
     const _displayAddProjectModal = () => {
         const modal = document.querySelector('.modal-add-project');
         modal.style.display = 'block';
     };
 
-    const addProjectButton = document.querySelector('#add-project');
-    addProjectButton.addEventListener('click', _displayAddProjectModal);
+    const _addProjectButton = document.querySelector('#add-project');
+    _addProjectButton.addEventListener('click', _displayAddProjectModal);
 
     const _hideModal = modal => {
         modal.style.display = 'none';
@@ -169,19 +174,29 @@ const DOM = (() => {
         _hideModal(parent);
     }));
 
+    let _editTarget;
+
     const _submitTodoForm = e => {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
 
-        const todo = Todo(
-            formData.get('title'),
-            formData.get('due-date'),
-            formData.get('priority'),
-            formData.get('description')
-        );
+        if (!_isEdit){
+            const todo = Todo(
+                formData.get('title'),
+                formData.get('due-date'),
+                formData.get('priority'),
+                formData.get('description')
+            );
 
-        _currentProject.addTodo(todo);
+            _currentProject.addTodo(todo);
+        } else {
+            _editTarget.setTitle(formData.get('title'));
+            _editTarget.setDueDate(formData.get('due-date'));
+            _editTarget.setPriority(formData.get('priority'));
+            _editTarget.setDescription(formData.get('description'));
+        }
+
         _clearTodos();
 
         if (_currentProject === Home) {
@@ -241,6 +256,8 @@ const DOM = (() => {
 
         document.getElementById('description').value = todo.getDescription();
 
+        _isEdit = true;
+        _editTarget = todo;
         _displayAddEditTodoModal();
     };
 

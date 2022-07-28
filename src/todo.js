@@ -9,11 +9,20 @@ const todo = (title, dueDate, priority, description) => {
     const getPriority = () => _priority;
     const getDescription = () => _description;
 
+    const setTitle = title => _title = title;
+    const setDueDate = dueDate => _dueDate = dueDate;
+    const setPriority = priority => _priority = priority;
+    const setDescription = description => _description = description;
+
     return {
         getTitle,
         getDueDate,
         getPriority,
-        getDescription
+        getDescription,
+        setTitle,
+        setDueDate,
+        setPriority,
+        setDescription
     };
 };
 
