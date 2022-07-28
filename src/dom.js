@@ -32,20 +32,17 @@ const DOM = (() => {
         return target.parentElement.getAttribute('data-id').split('-');
     };
 
-    const _displayDetailsModal = () => {
-        _clearDetailsModal();
+    const _createDetailsPara = (prefix, getter) => {
+        const para = document.createElement('p');
+        para.textContent = `${prefix}: ${getter()}`;
+        return para;
+    };
 
-        const title = document.createElement('p');
-        title.textContent = `Title: ${_detailsTarget.getTitle()}`;
-
-        const dueDate = document.createElement('p');
-        dueDate.textContent = `Due date: ${_detailsTarget.getDueDate()}`;
-
-        const priority = document.createElement('p');
-        priority.textContent = `Priority: ${_detailsTarget.getPriority()}`;
-
-        const description = document.createElement('p');
-        description.textContent = `Description: ${_detailsTarget.getDescription()}`;
+    const _generateDetailsContent = () => {
+        const title = _createDetailsPara('Title', _detailsTarget.getTitle);
+        const dueDate = _createDetailsPara('Due date', _detailsTarget.getDueDate);
+        const priority = _createDetailsPara('Priority', _detailsTarget.getPriority);
+        const description = _createDetailsPara('Description', _detailsTarget.getDescription);
 
         const detailsElement = document.createElement('div');
         detailsElement.append(title, dueDate, priority, description);
@@ -54,8 +51,14 @@ const DOM = (() => {
         const editButton = document.getElementById('details-edit');
         detailsModal.firstElementChild.insertBefore(detailsElement, editButton);
 
-        _editTarget = _detailsTarget;
+        return detailsModal;
+    };
+
+    const _displayDetailsModal = () => {
+        _clearDetailsModal();
+        const detailsModal = _generateDetailsContent();
         detailsModal.style.display = 'block';
+        _editTarget = _detailsTarget;
     };
 
     const _createTodoElement = (projectId, todoId) => {
