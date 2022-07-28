@@ -145,8 +145,8 @@ const DOM = (() => {
         modal.style.display = 'block';
     };
 
-    const addTodoButton = document.querySelector('#add-todo');
-    addTodoButton.addEventListener('click', _displayAddEditTodoModal);
+    const _addTodoButton = document.querySelector('#add-todo');
+    _addTodoButton.addEventListener('click', _displayAddEditTodoModal);
 
     const _displayAddProjectModal = () => {
         const modal = document.querySelector('.modal-add-project');
@@ -156,12 +156,12 @@ const DOM = (() => {
     const addProjectButton = document.querySelector('#add-project');
     addProjectButton.addEventListener('click', _displayAddProjectModal);
 
-    const _hideModal = (modal) => {
+    const _hideModal = modal => {
         modal.style.display = 'none';
     };
 
-    const cancelButtons = document.querySelectorAll('.cancel');
-    cancelButtons.forEach(button => button.addEventListener('click', () => {
+    const _cancelButtons = document.querySelectorAll('.cancel');
+    _cancelButtons.forEach(button => button.addEventListener('click', () => {
         let parent = button.parentElement;
         while (parent.classList[0] !== ('modal')) {
             parent = parent.parentElement;
@@ -169,7 +169,7 @@ const DOM = (() => {
         _hideModal(parent);
     }));
 
-    const submitTodoForm = (e) => {
+    const _submitTodoForm = e => {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
@@ -196,10 +196,10 @@ const DOM = (() => {
         _hideModal(modal);
     };
 
-    const todoForm = document.getElementById('todo-form');
-    todoForm.addEventListener('submit', submitTodoForm);
+    const _todoForm = document.getElementById('todo-form');
+    _todoForm.addEventListener('submit', _submitTodoForm);
 
-    const submitProjectForm = (e) => {
+    const _submitProjectForm = e => {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
@@ -216,8 +216,8 @@ const DOM = (() => {
         _hideModal(modal);
     };
 
-    const projectForm = document.getElementById('project-form');
-    projectForm.addEventListener('submit', submitProjectForm);
+    const _projectForm = document.getElementById('project-form');
+    _projectForm.addEventListener('submit', _submitProjectForm);
 
     const _editTodo = e => {
         const [projectId, todoId] = _parseDataId(e.target);
