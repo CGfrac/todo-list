@@ -64,20 +64,17 @@ const DOM = (() => {
     const _deleteTodo = () => {
         const [projectId, todoId] = _parseDataId(_deleteTodoTarget);
 
-        _clearTodos()
-
-        if (_currentProject === Home) {
+        // if projectId is Home
+        if (projectId === '0') {
             Home.deleteTodo(todoId);
-            listAllTodos();
         } else {
             Home.getProject(projectId).deleteTodo(todoId);
-            _listTodos(projectId);
         }
-    };
 
-    const _clearTodos = () => {
-        while (_todosContainer.lastChild) {
-            _todosContainer.removeChild(_todosContainer.lastChild);
+        if (_currentProject === Home) {
+            refreshTodos(Home);
+        } else {
+            refreshTodos(_currentProject);
         }
     };
 
@@ -162,6 +159,12 @@ const DOM = (() => {
         main.appendChild(deleteProjectButton);
     };
 
+    const _clearTodos = () => {
+        while (_todosContainer.lastChild) {
+            _todosContainer.removeChild(_todosContainer.lastChild);
+        }
+    };
+
     const _listTodos = project => {
         for (const [id, todo] of project.getTodos()) {
             const todoElement = _createTodoElement(project.getId(), id, todo);
@@ -172,10 +175,20 @@ const DOM = (() => {
         }
     };
 
-    const listAllTodos = () => {
+    const _listAllTodos = () => {
         _listTodos(Home);
 
         for (const project of Home.getProjects()) {
+            _listTodos(project);
+        }
+    };
+
+    const refreshTodos = project => {
+        _clearTodos()
+
+        if (project === Home) {
+            _listAllTodos();
+        } else {
             _listTodos(project);
         }
     };
@@ -186,8 +199,7 @@ const DOM = (() => {
             const project = Home.getProject(projectId);
             _currentProject = project;
 
-            _clearTodos();
-            _listTodos(project);
+            refreshTodos(project);
         });
     };
 
@@ -217,8 +229,7 @@ const DOM = (() => {
         main.removeChild(deleteProjectButton);
 
         _currentProject = Home;
-        _clearTodos();
-        listAllTodos();
+        refreshTodos(Home);
         _clearProjects();
         listProjects();
     };
@@ -248,17 +259,11 @@ const DOM = (() => {
             }
         }
 
-        _clearTodos();
-
-        if (_currentProject === Home) {
-            listAllTodos();
-        } else {
-            _listTodos(_currentProject);
-        }
+        refreshTodos(Home);
 
         form.reset();
 
-        const modal = document.querySelector('.modal-edit-add');
+        const modal = document.getElementById('modal-edit-add');
         _hideModal(modal);
     };
 
@@ -275,15 +280,14 @@ const DOM = (() => {
 
         form.reset();
 
-        const modal = document.querySelector('.modal-add-project');
+        const modal = document.getElementById('modal-add-project');
         _hideModal(modal);
     };
 
     const _homeHeader = document.getElementById('home');
     _homeHeader.addEventListener('click', () => {
         _currentProject = Home;
-        _clearTodos();
-        listAllTodos();
+        refreshTodos(Home);
     });
 
     const _cancelButtons = document.querySelectorAll('.cancel');
@@ -329,7 +333,7 @@ const DOM = (() => {
     return {
         Home,
         listProjects,
-        listAllTodos
+        refreshTodos
     };
 })();
 
