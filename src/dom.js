@@ -13,8 +13,8 @@ const DOM = (() => {
     let _detailsTarget;
     let _deleteTodoTarget;
 
-    const _clearDetailsModal = () => {
-        const detailsModalDiv = document.querySelector('.modal-details').firstElementChild;
+    const _clearDetailsModal = detailsModal => {
+        const detailsModalDiv = detailsModal.firstElementChild;
         const editButton = document.getElementById('details-edit');
 
         while (detailsModalDiv.firstElementChild !== editButton) {
@@ -28,7 +28,7 @@ const DOM = (() => {
         return para;
     };
 
-    const _generateDetailsContent = () => {
+    const _generateDetailsContent = detailsModal => {
         const title = _createDetailsPara('Title', _detailsTarget.getTitle);
         const dueDate = _createDetailsPara('Due date', _detailsTarget.getDueDate);
         const priority = _createDetailsPara('Priority', _detailsTarget.getPriority);
@@ -37,32 +37,19 @@ const DOM = (() => {
         const detailsElement = document.createElement('div');
         detailsElement.append(title, dueDate, priority, description);
 
-        const detailsModal = document.querySelector('.modal-details');
         const editButton = document.getElementById('details-edit');
         detailsModal.firstElementChild.insertBefore(detailsElement, editButton);
-
-        return detailsModal;
     };
 
-    const _displayDetailsModal = () => {
-        _clearDetailsModal();
-        const detailsModal = _generateDetailsContent();
-        detailsModal.style.display = 'block';
-        _editTarget = _detailsTarget;
-    };
+    const _displayModal = id => {
+        const modal = document.getElementById(id);
 
-    const _displayConfirmDeleteModal = () => {
-        const _deleteModal = document.querySelector('.modal-delete');
-        _deleteModal.style.display = 'block';
-    };
+        if (id === 'modal-details') {
+            _clearDetailsModal(modal);
+            _generateDetailsContent(modal);
+            _editTarget = _detailsTarget;
+        }
 
-    const _displayAddEditTodoModal = () => {
-        const modal = document.querySelector('.modal-edit-add');
-        modal.style.display = 'block';
-    };
-
-    const _displayAddProjectModal = () => {
-        const modal = document.querySelector('.modal-add-project');
         modal.style.display = 'block';
     };
 
@@ -114,7 +101,7 @@ const DOM = (() => {
         document.getElementById('description').value = _editTarget.getDescription();
 
         _isEdit = true;
-        _displayAddEditTodoModal();
+        _displayModal('modal-edit-add');
     };
 
     const _createTodoElement = (projectId, todoId, todo) => {
@@ -135,7 +122,7 @@ const DOM = (() => {
         detailsButton.classList.add('todo-details');
         detailsButton.addEventListener('click', e => {
             _detailsTarget = todo;
-            _displayDetailsModal();
+            _displayModal('modal-details');
         });
 
         const editButton = document.createElement('button');
@@ -153,7 +140,7 @@ const DOM = (() => {
         deleteButton.addEventListener('click', () => {
             _isDeleteTargetTodo = true;
             _deleteTodoTarget = element;
-            _displayConfirmDeleteModal();
+            _displayModal('modal-delete');
         });
 
         element.append(name, date, detailsButton, editButton, deleteButton);
@@ -169,7 +156,7 @@ const DOM = (() => {
 
         deleteProjectButton.addEventListener('click', () => {
             _isDeleteTargetTodo = false;
-            _displayConfirmDeleteModal();
+            _displayModal('modal-delete');
         });
 
         main.appendChild(deleteProjectButton);
@@ -257,7 +244,7 @@ const DOM = (() => {
             _editTarget.setDescription(formData.get('description'));
 
             if (_isEditFromDetails) {
-                _displayDetailsModal();
+                _displayModal('modal-details');
             }
         }
 
@@ -311,11 +298,11 @@ const DOM = (() => {
     const _addTodoButton = document.querySelector('#add-todo');
     _addTodoButton.addEventListener('click', () => {
         _isEdit = false;
-        _displayAddEditTodoModal();
+        _displayModal('modal-edit-add');
     });
 
     const _addProjectButton = document.querySelector('#add-project');
-    _addProjectButton.addEventListener('click', _displayAddProjectModal);
+    _addProjectButton.addEventListener('click', () => _displayModal('modal-add-project'));
 
     const _detailsModalEditButton = document.getElementById('details-edit');
     _detailsModalEditButton.addEventListener('click', e => {
