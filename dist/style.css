@@ -73,11 +73,11 @@ form > div {
 }
 
 form > button,
-.modal-delete button {
+#modal-delete button {
     padding: 8px 0;
 }
 
-.modal-delete > div {
+#modal-delete > div {
     display: grid;
     grid-template-columns: 1fr;
     text-align: center;
