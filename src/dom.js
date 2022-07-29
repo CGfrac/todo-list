@@ -148,6 +148,7 @@ const DOM = (() => {
     const _createDeleteProjectButton = () => {
         const deleteProjectButton = document.createElement('button');
         deleteProjectButton.textContent = 'Delete Project';
+        deleteProjectButton.id = 'delete-project-button';
 
         const main = document.querySelector('.main');
 
@@ -157,6 +158,11 @@ const DOM = (() => {
         });
 
         main.appendChild(deleteProjectButton);
+    };
+
+    const _removeDeleteProjectButton = () => {
+        const button = document.getElementById('delete-project-button');
+        button.remove();
     };
 
     const _clearTodos = () => {
@@ -170,8 +176,15 @@ const DOM = (() => {
             const todoElement = _createTodoElement(project.getId(), id, todo);
             _todosContainer.appendChild(todoElement);
         }
-        if (_currentProject !== Home) {
-            _createDeleteProjectButton();
+
+        if (!document.getElementById('delete-project-button')) {
+            if (_currentProject !== Home) {
+                _createDeleteProjectButton();
+            }
+        } else {
+            if (_currentProject === Home) {
+                _removeDeleteProjectButton();
+            }
         }
     };
 
