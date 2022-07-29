@@ -7,5 +7,5 @@ DOM.Home.addProject('Proj2');
 const todo1 = Todo('test', '2nd june', 'low', 'hi');
 DOM.Home.addTodo(todo1);
 
-DOM.listProjects();
+DOM.refreshProjectsList();
 DOM.refreshTodos(DOM.Home);

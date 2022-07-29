@@ -193,6 +193,12 @@ const DOM = (() => {
         }
     };
 
+    const _clearProjects = () => {
+        while (_projectsContainer.lastChild) {
+            _projectsContainer.removeChild(_projectsContainer.lastChild);
+        }
+    };
+
     const _createProjectListener = li => {
         li.addEventListener('click', e => {
             const projectId = e.target.getAttribute('data-project-id');
@@ -203,7 +209,7 @@ const DOM = (() => {
         });
     };
 
-    const listProjects = () => {
+    const _listProjects = () => {
         for (const project of Home.getProjects()) {
             const li = document.createElement('li');
             li.setAttribute('data-project-id', project.getId());
@@ -215,10 +221,9 @@ const DOM = (() => {
         }
     };
 
-    const _clearProjects = () => {
-        while (_projectsContainer.lastChild) {
-            _projectsContainer.removeChild(_projectsContainer.lastChild);
-        }
+    const refreshProjectsList = () => {
+        _clearProjects();
+        _listProjects();
     };
 
     const _deleteProject = () => {
@@ -230,8 +235,7 @@ const DOM = (() => {
 
         _currentProject = Home;
         refreshTodos(Home);
-        _clearProjects();
-        listProjects();
+        refreshProjectsList();
     };
 
     const _submitTodoForm = e => {
@@ -275,8 +279,7 @@ const DOM = (() => {
         const title = formData.get('project-name');
         Home.addProject(title);
 
-        _clearProjects();
-        listProjects();
+        refreshProjectsList();
 
         form.reset();
 
@@ -332,7 +335,7 @@ const DOM = (() => {
 
     return {
         Home,
-        listProjects,
+        refreshProjectsList,
         refreshTodos
     };
 })();
