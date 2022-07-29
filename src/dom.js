@@ -22,10 +22,14 @@ const DOM = (() => {
         }
     };
 
+    const _createElementWithText = (elementType, textContent) => {
+        const element = document.createElement(elementType);
+        element.textContent = textContent;
+        return element;
+    };
+
     const _createDetailsPara = (prefix, getter) => {
-        const para = document.createElement('p');
-        para.textContent = `${prefix}: ${getter()}`;
-        return para;
+        return _createElementWithText('p', `${prefix}: ${getter()}`);
     };
 
     const _generateDetailsContent = detailsModal => {
@@ -108,22 +112,18 @@ const DOM = (() => {
         const dataId = `${projectId}-${todoId}`;
         element.setAttribute('data-id', dataId);
 
-        const name = document.createElement('p');
-        name.textContent = todo.getTitle();
+        const name = _createElementWithText('p', todo.getTitle());
+        const date = _createElementWithText('p', todo.getDueDate());
+        const detailsButton = _createElementWithText('button', 'Details');
+        const editButton = _createElementWithText('button', 'Edit');
+        const deleteButton = _createElementWithText('button', 'Delete');
 
-        const date = document.createElement('p');
-        date.textContent = todo.getDueDate();
-
-        const detailsButton = document.createElement('button');
-        detailsButton.textContent = 'Details';
         detailsButton.classList.add('todo-details');
         detailsButton.addEventListener('click', e => {
             _detailsTarget = todo;
             _displayModal('modal-details');
         });
 
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
         editButton.classList.add('todo-edit');
         editButton.addEventListener('click', e => {
             _isEditFromDetails = false;
@@ -131,8 +131,6 @@ const DOM = (() => {
             _editTodo();
         });
 
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
         deleteButton.classList.add('todo-delete');
         deleteButton.addEventListener('click', () => {
             _isDeleteTargetTodo = true;
@@ -146,8 +144,7 @@ const DOM = (() => {
     };
 
     const _createDeleteProjectButton = () => {
-        const deleteProjectButton = document.createElement('button');
-        deleteProjectButton.textContent = 'Delete Project';
+        const deleteProjectButton = _createElementWithText('button', 'Delete Project');
         deleteProjectButton.id = 'delete-project-button';
 
         const main = document.querySelector('.main');
@@ -224,9 +221,8 @@ const DOM = (() => {
 
     const _listProjects = () => {
         for (const project of Home.getProjects()) {
-            const li = document.createElement('li');
+            const li = _createElementWithText('li', project.getTitle());
             li.setAttribute('data-project-id', project.getId());
-            li.textContent = project.getTitle();
 
             _createProjectListener(li);
 
