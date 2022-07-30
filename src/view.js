@@ -78,7 +78,7 @@ const view = (() => {
         todoElement.remove();
     };
 
-    const updateTodoElement = editTarget => {
+    const displayEditForm = editTarget => {
         document.getElementById('title').value = editTarget.getTitle();
         document.getElementById('due-date').value = editTarget.getDueDate();
 
@@ -169,7 +169,7 @@ const view = (() => {
     return {
         Home,
         deleteTodoElement,
-        updateTodoElement,
+        displayEditForm,
         displayModal,
         displayDetailsModal,
         hideModal,

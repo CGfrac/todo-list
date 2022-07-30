@@ -112,7 +112,7 @@ const controller = (() => {
     _detailsModalEditButton.addEventListener('click', e => {
         _isEdit = true;
         _isEditFromDetails = true;
-        View.updateTodoElement(_editTarget);
+        View.displayEditForm(_editTarget);
     });
 
     const _confirmDeleteButton = document.getElementById('confirm-delete');
@@ -158,7 +158,7 @@ const controller = (() => {
             _isEdit = true;
             _isEditFromDetails = false;
             _editTarget = todo;
-            View.updateTodoElement(_editTarget);
+            View.displayEditForm(_editTarget);
         }
         _setButtonsListeners('todo-edit', editButtonsListener);
 
