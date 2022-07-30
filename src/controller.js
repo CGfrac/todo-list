@@ -154,37 +154,41 @@ const controller = (() => {
         DOM.displayModal('modal-edit-add');
     };
 
+    const _grabTodoFromElement = todoElement => {
+        const [projectId, todoId] = _parseDataId(todoElement);
+        return Home.getProject(projectId).getTodo(todoId);
+    };
+
+    const _setButtonsListeners = (buttonClass, listener) => {
+        const buttons = document.querySelectorAll(`.${buttonClass}`);
+        buttons.forEach(button => {
+            const todoElement = button.parentElement;
+            button.addEventListener('click', () => listener(todoElement));
+        });
+    };
+
     const _setTodosListeners = () => {
-        const detailsButtons = document.querySelectorAll('.todo-details');
-        detailsButtons.forEach(button => {
-            const [projectId, todoId] = _parseDataId(button.parentElement);
-            const todo = Home.getProject(projectId).getTodo(todoId);
-            button.addEventListener('click', () => {
-                _editTarget = todo;
-                DOM.displayDetailsModal(todo);
-            })
-        });
+        const detailsButtonsListener = todoElement => {
+            const todo = _grabTodoFromElement(todoElement);
+            _editTarget = todo;
+            DOM.displayDetailsModal(todo);
+        }
+        _setButtonsListeners('todo-details', detailsButtonsListener);
 
-        const editButtons = document.querySelectorAll('.todo-edit');
-        editButtons.forEach(button => {
-            const [projectId, todoId] = _parseDataId(button.parentElement);
-            const todo = Home.getProject(projectId).getTodo(todoId);
-            button.addEventListener('click', () => {
-                _isEditFromDetails = false;
-                _editTarget = todo;
-                _editTodo();
-            })
-        });
+        const editButtonsListener = todoElement => {
+            const todo = _grabTodoFromElement(todoElement);
+            _isEditFromDetails = false;
+            _editTarget = todo;
+            _editTodo();
+        }
+        _setButtonsListeners('todo-edit', editButtonsListener);
 
-        const deleteButtons = document.querySelectorAll('.todo-delete');
-        deleteButtons.forEach(button => {
-            const parent = button.parentElement;
-            button.addEventListener('click', () => {
-                _isDeleteTargetTodo = true;
-                _deleteTodoTarget = parent;
-                DOM.displayModal('modal-delete');
-            })
-        });
+        const deleteButtonsListener = todoElement => {
+            _isDeleteTargetTodo = true;
+            _deleteTodoTarget = todoElement;
+            DOM.displayModal('modal-delete');
+        }
+        _setButtonsListeners('todo-delete', deleteButtonsListener);
     };
 
     const _setDeleteProjectButtonListener = () => {
