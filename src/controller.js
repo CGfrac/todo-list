@@ -81,51 +81,6 @@ const controller = (() => {
         View.hideModal(modal);
     };
 
-    const _homeHeader = document.getElementById('home');
-    _homeHeader.addEventListener('click', () => {
-        _currentProject = Home;
-        View.refreshTodos(Home);
-        if (document.getElementById('delete-project-button')) {
-            View.removeDeleteProjectButton();
-        }
-    });
-
-    const _cancelButtons = document.querySelectorAll('.cancel');
-    _cancelButtons.forEach(button => button.addEventListener('click', () => {
-        let parent = button.parentElement;
-        while (parent.classList[0] !== ('modal')) {
-            parent = parent.parentElement;
-        }
-        View.hideModal(parent);
-    }));
-
-    const _addTodoButton = document.querySelector('#add-todo');
-    _addTodoButton.addEventListener('click', () => {
-        _isEdit = false;
-        View.displayModal('modal-edit-add');
-    });
-
-    const _addProjectButton = document.querySelector('#add-project');
-    _addProjectButton.addEventListener('click', () => View.displayModal('modal-add-project'));
-
-    const _detailsModalEditButton = document.getElementById('details-edit');
-    _detailsModalEditButton.addEventListener('click', e => {
-        _isEdit = true;
-        _isEditFromDetails = true;
-        View.displayEditForm(_editTarget);
-    });
-
-    const _confirmDeleteButton = document.getElementById('confirm-delete');
-    _confirmDeleteButton.addEventListener('click', () => {
-        if (_isDeleteTargetTodo) {
-            _deleteTodo();
-        } else {
-            _deleteProject();
-        }
-        const todoElement = _confirmDeleteButton.parentElement.parentElement;
-        View.hideModal(todoElement);
-    });
-
     const _projectForm = document.getElementById('project-form');
     _projectForm.addEventListener('submit', _submitProjectForm);
 
@@ -205,6 +160,51 @@ const controller = (() => {
 
     _setContainerObserver('todos-container', _setTodosListeners);
     _setContainerObserver('projects-container', _setProjectsListeners);
+
+    const _homeHeader = document.getElementById('home');
+    _homeHeader.addEventListener('click', () => {
+        _currentProject = Home;
+        View.refreshTodos(Home);
+        if (document.getElementById('delete-project-button')) {
+            View.removeDeleteProjectButton();
+        }
+    });
+
+    const _cancelButtons = document.querySelectorAll('.cancel');
+    _cancelButtons.forEach(button => button.addEventListener('click', () => {
+        let parent = button.parentElement;
+        while (parent.classList[0] !== ('modal')) {
+            parent = parent.parentElement;
+        }
+        View.hideModal(parent);
+    }));
+
+    const _addTodoButton = document.querySelector('#add-todo');
+    _addTodoButton.addEventListener('click', () => {
+        _isEdit = false;
+        View.displayModal('modal-edit-add');
+    });
+
+    const _addProjectButton = document.querySelector('#add-project');
+    _addProjectButton.addEventListener('click', () => View.displayModal('modal-add-project'));
+
+    const _detailsModalEditButton = document.getElementById('details-edit');
+    _detailsModalEditButton.addEventListener('click', e => {
+        _isEdit = true;
+        _isEditFromDetails = true;
+        View.displayEditForm(_editTarget);
+    });
+
+    const _confirmDeleteButton = document.getElementById('confirm-delete');
+    _confirmDeleteButton.addEventListener('click', () => {
+        if (_isDeleteTargetTodo) {
+            _deleteTodo();
+        } else {
+            _deleteProject();
+        }
+        const todoElement = _confirmDeleteButton.parentElement.parentElement;
+        View.hideModal(todoElement);
+    });
 })();
 
 export default controller;
