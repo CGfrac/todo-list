@@ -3,9 +3,10 @@ import Home from './home.js';
 const view = (() => {
     const _projectsContainer = document.getElementById('projects-container');
     const _todosContainer = document.getElementById('todos-container');
+    const _detailsModal = document.getElementById('modal-details');
 
-    const _clearDetailsModal = detailsModal => {
-        const detailsModalDiv = detailsModal.firstElementChild;
+    const _clearDetailsModal = () => {
+        const detailsModalDiv = _detailsModal.firstElementChild;
         const editButton = document.getElementById('details-edit');
 
         while (detailsModalDiv.firstElementChild !== editButton) {
@@ -23,7 +24,7 @@ const view = (() => {
         return _createElementWithText('p', `${prefix}: ${getter()}`);
     };
 
-    const _generateDetailsContent = (detailsModal, target) => {
+    const _generateDetailsContent = (target) => {
         const title = _createDetailsPara('Title', target.getTitle);
         const dueDate = _createDetailsPara('Due date', target.getDueDate);
         const priority = _createDetailsPara('Priority', target.getPriority);
@@ -33,7 +34,7 @@ const view = (() => {
         detailsElement.append(title, dueDate, priority, description);
 
         const editButton = document.getElementById('details-edit');
-        detailsModal.firstElementChild.insertBefore(detailsElement, editButton);
+        _detailsModal.firstElementChild.insertBefore(detailsElement, editButton);
     };
 
     const displayModal = id => {
@@ -42,10 +43,9 @@ const view = (() => {
     };
 
     const displayDetailsModal = target => {
-        const modal = document.getElementById('modal-details');
-        _clearDetailsModal(modal);
-        _generateDetailsContent(modal, target);
-        displayModal('modal-details');
+        _clearDetailsModal();
+        _generateDetailsContent(target);
+        _detailsModal.style.display = 'block';
     };
 
     const hideModal = modal => {
