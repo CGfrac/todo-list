@@ -8,7 +8,6 @@ const controller = (() => {
     let _isEditFromDetails = false;
     let _isDeleteTargetTodo = false;
     let _deleteTodoTarget;
-    let _detailsTarget;
     let _editTarget;
 
     const _parseDataId = target => {
@@ -161,7 +160,6 @@ const controller = (() => {
             const [projectId, todoId] = _parseDataId(button.parentElement);
             const todo = Home.getProject(projectId).getTodo(todoId);
             button.addEventListener('click', () => {
-                _detailsTarget = todo;
                 _editTarget = todo;
                 DOM.displayDetailsModal(todo);
             })
