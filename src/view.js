@@ -78,6 +78,28 @@ const view = (() => {
         todoElement.remove();
     };
 
+    const updateTodoElement = editTarget => {
+        document.getElementById('title').value = editTarget.getTitle();
+        document.getElementById('due-date').value = editTarget.getDueDate();
+
+        const priority = editTarget.getPriority();
+
+        switch (priority) {
+            case 'high':
+                document.getElementById('priority-high').checked = true;
+                break;
+            case 'medium':
+                document.getElementById('priority-medium').checked = true;
+                break;
+            default:
+                document.getElementById('priority-low').checked = true;
+        }
+
+        document.getElementById('description').value = editTarget.getDescription();
+
+        displayModal('modal-edit-add');
+    };
+
     const createDeleteProjectButton = () => {
         const deleteProjectButton = _createElementWithText('button', 'Delete Project');
         deleteProjectButton.id = 'delete-project-button';
@@ -147,6 +169,7 @@ const view = (() => {
     return {
         Home,
         deleteTodoElement,
+        updateTodoElement,
         displayModal,
         displayDetailsModal,
         hideModal,

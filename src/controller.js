@@ -110,8 +110,9 @@ const controller = (() => {
 
     const _detailsModalEditButton = document.getElementById('details-edit');
     _detailsModalEditButton.addEventListener('click', e => {
+        _isEdit = true;
         _isEditFromDetails = true;
-        _editTodo();
+        View.updateTodoElement(_editTarget);
     });
 
     const _confirmDeleteButton = document.getElementById('confirm-delete');
@@ -130,29 +131,6 @@ const controller = (() => {
 
     const _todoForm = document.getElementById('todo-form');
     _todoForm.addEventListener('submit', _submitTodoForm);
-
-    const _editTodo = () => {
-        document.getElementById('title').value = _editTarget.getTitle();
-        document.getElementById('due-date').value = _editTarget.getDueDate();
-
-        const priority = _editTarget.getPriority();
-
-        switch (priority) {
-            case 'high':
-                document.getElementById('priority-high').checked = true;
-                break;
-            case 'medium':
-                document.getElementById('priority-medium').checked = true;
-                break;
-            default:
-                document.getElementById('priority-low').checked = true;
-        }
-
-        document.getElementById('description').value = _editTarget.getDescription();
-
-        _isEdit = true;
-        View.displayModal('modal-edit-add');
-    };
 
     const _grabTodoFromElement = todoElement => {
         const [projectId, todoId] = _parseDataId(todoElement);
@@ -177,9 +155,10 @@ const controller = (() => {
 
         const editButtonsListener = todoElement => {
             const todo = _grabTodoFromElement(todoElement);
+            _isEdit = true;
             _isEditFromDetails = false;
             _editTarget = todo;
-            _editTodo();
+            View.updateTodoElement(_editTarget);
         }
         _setButtonsListeners('todo-edit', editButtonsListener);
 
