@@ -95,8 +95,8 @@ const controller = (() => {
     const _setButtonsListeners = (buttonClass, listener) => {
         const buttons = document.querySelectorAll(`.${buttonClass}`);
         buttons.forEach(button => {
-            const todoElement = button.parentElement;
-            button.addEventListener('click', () => listener(todoElement));
+            const parent = button.parentElement;
+            button.addEventListener('click', () => listener(parent));
         });
     };
 
@@ -170,22 +170,21 @@ const controller = (() => {
         }
     });
 
-    const _cancelButtons = document.querySelectorAll('.cancel');
-    _cancelButtons.forEach(button => button.addEventListener('click', () => {
-        let parent = button.parentElement;
+    const _cancelButtonListener = parent => {
         while (parent.classList[0] !== ('modal')) {
             parent = parent.parentElement;
         }
         View.hideModal(parent);
-    }));
+    };
+    _setButtonsListeners('cancel', _cancelButtonListener);
 
-    const _addTodoButton = document.querySelector('#add-todo');
+    const _addTodoButton = document.getElementById('add-todo');
     _addTodoButton.addEventListener('click', () => {
         _isEdit = false;
         View.displayModal('modal-edit-add');
     });
 
-    const _addProjectButton = document.querySelector('#add-project');
+    const _addProjectButton = document.getElementById('add-project');
     _addProjectButton.addEventListener('click', () => View.displayModal('modal-add-project'));
 
     const _detailsModalEditButton = document.getElementById('details-edit');
