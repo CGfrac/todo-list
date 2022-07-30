@@ -17,14 +17,8 @@ const controller = (() => {
 
     const _deleteTodo = () => {
         const [projectId, todoId] = _parseDataId(_deleteTodoTarget);
-
         Home.getProject(projectId).deleteTodo(todoId);
-
-        if (DOM.getCurrentProject === Home) {
-            DOM.refreshTodos(Home);
-        } else {
-            DOM.refreshTodos(_currentProject);
-        }
+        DOM.deleteTodoElement(_deleteTodoTarget);
     };
 
     const _deleteProject = () => {

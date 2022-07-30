@@ -74,6 +74,10 @@ const DOM = (() => {
         return element;
     };
 
+    const deleteTodoElement = (todoElement) => {
+        todoElement.remove();
+    };
+
     const createDeleteProjectButton = () => {
         const deleteProjectButton = _createElementWithText('button', 'Delete Project');
         deleteProjectButton.id = 'delete-project-button';
@@ -142,6 +146,7 @@ const DOM = (() => {
 
     return {
         Home,
+        deleteTodoElement,
         displayModal,
         displayDetailsModal,
         hideModal,
