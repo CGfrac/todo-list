@@ -5,7 +5,13 @@ const home = (() => {
     const _projects = {};
     let _nextProjectId = 1;
 
-    const getProject = id => _projects[id];
+    const getProject = id => {
+        // if projectId is Home
+        if (id === '0') {
+            return _proto;
+        }
+        return _projects[id]
+    };
     const getProjects = () => Object.values(_projects);
 
     const addProject = (title) => {
