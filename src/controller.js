@@ -195,17 +195,13 @@ const controller = (() => {
         });
     };
 
-    const _todosContainer = document.getElementById('todos-container');
-    const _todosObserver = new MutationObserver(_setTodosListeners);
-    _todosObserver.observe(_todosContainer, {childList: true});
-
     const _setDeleteProjectButtonListener = () => {
         const deleteProjectButton = document.getElementById('delete-project-button');
         deleteProjectButton.addEventListener('click', () => {
             _isDeleteTargetTodo = false;
             DOM.displayModal('modal-delete');
         });
-    }
+    };
 
     const _setProjectsListeners = () => {
         const listItems = document.querySelectorAll('.project-title');
@@ -226,10 +222,14 @@ const controller = (() => {
         )});
     };
 
+    const _setContainerObserver = (containerId, fn) => {
+        const container = document.getElementById(containerId);
+        const observer = new MutationObserver(fn);
+        observer.observe(container, {childList: true});
+    };
 
-    const _projectsContainer = document.getElementById('projects-container');
-    const _projectsObserver = new MutationObserver(_setProjectsListeners);
-    _projectsObserver.observe(_projectsContainer, {childList: true});
+    _setContainerObserver('todos-container', _setTodosListeners);
+    _setContainerObserver('projects-container', _setProjectsListeners);
 })();
 
 export default controller;
