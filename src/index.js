@@ -1,12 +1,12 @@
-import DOM from './dom.js';
+import View from './view.js';
 import Todo from './todo.js';
 import Controller from './controller.js'
 
-DOM.Home.addProject('Test');
-DOM.Home.addProject('Proj2');
+View.Home.addProject('Test');
+View.Home.addProject('Proj2');
 
 const todo1 = Todo('test', '2nd june', 'low', 'hi');
-DOM.Home.addTodo(todo1);
+View.Home.addTodo(todo1);
 
-DOM.refreshProjectsList();
-DOM.refreshTodos(DOM.Home);
+View.refreshProjectsList();
+View.refreshTodos(View.Home);

@@ -1,6 +1,6 @@
 import Home from './home.js';
 
-const DOM = (() => {
+const view = (() => {
     const _projectsContainer = document.getElementById('projects-container');
     const _todosContainer = document.getElementById('todos-container');
 
@@ -157,4 +157,4 @@ const DOM = (() => {
     };
 })();
 
-export default DOM;
+export default view;

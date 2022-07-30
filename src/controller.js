@@ -1,6 +1,6 @@
 import Home from './home.js';
 import Todo from './todo.js';
-import DOM from './dom.js';
+import View from './view.js';
 
 const controller = (() => {
     let _currentProject = Home;
@@ -17,7 +17,7 @@ const controller = (() => {
     const _deleteTodo = () => {
         const [projectId, todoId] = _parseDataId(_deleteTodoTarget);
         Home.getProject(projectId).deleteTodo(todoId);
-        DOM.deleteTodoElement(_deleteTodoTarget);
+        View.deleteTodoElement(_deleteTodoTarget);
     };
 
     const _deleteProject = () => {
@@ -28,8 +28,8 @@ const controller = (() => {
         main.removeChild(deleteProjectButton);
 
         _currentProject = Home;
-        DOM.refreshTodos(Home);
-        DOM.refreshProjectsList();
+        View.refreshTodos(Home);
+        View.refreshProjectsList();
     };
 
     const _submitTodoForm = e => {
@@ -53,16 +53,16 @@ const controller = (() => {
             _editTarget.setDescription(formData.get('description'));
 
             if (_isEditFromDetails) {
-                DOM.displayDetailsModal(_editTarget);
+                View.displayDetailsModal(_editTarget);
             }
         }
 
-        DOM.refreshTodos(Home);
+        View.refreshTodos(Home);
 
         form.reset();
 
         const modal = document.getElementById('modal-edit-add');
-        DOM.hideModal(modal);
+        View.hideModal(modal);
     };
 
     const _submitProjectForm = e => {
@@ -73,20 +73,20 @@ const controller = (() => {
         const title = formData.get('project-name');
         Home.addProject(title);
 
-        DOM.refreshProjectsList();
+        View.refreshProjectsList();
 
         form.reset();
 
         const modal = document.getElementById('modal-add-project');
-        DOM.hideModal(modal);
+        View.hideModal(modal);
     };
 
     const _homeHeader = document.getElementById('home');
     _homeHeader.addEventListener('click', () => {
         _currentProject = Home;
-        DOM.refreshTodos(Home);
+        View.refreshTodos(Home);
         if (document.getElementById('delete-project-button')) {
-            DOM.removeDeleteProjectButton();
+            View.removeDeleteProjectButton();
         }
     });
 
@@ -96,17 +96,17 @@ const controller = (() => {
         while (parent.classList[0] !== ('modal')) {
             parent = parent.parentElement;
         }
-        DOM.hideModal(parent);
+        View.hideModal(parent);
     }));
 
     const _addTodoButton = document.querySelector('#add-todo');
     _addTodoButton.addEventListener('click', () => {
         _isEdit = false;
-        DOM.displayModal('modal-edit-add');
+        View.displayModal('modal-edit-add');
     });
 
     const _addProjectButton = document.querySelector('#add-project');
-    _addProjectButton.addEventListener('click', () => DOM.displayModal('modal-add-project'));
+    _addProjectButton.addEventListener('click', () => View.displayModal('modal-add-project'));
 
     const _detailsModalEditButton = document.getElementById('details-edit');
     _detailsModalEditButton.addEventListener('click', e => {
@@ -122,7 +122,7 @@ const controller = (() => {
             _deleteProject();
         }
         const todoElement = _confirmDeleteButton.parentElement.parentElement;
-        DOM.hideModal(todoElement);
+        View.hideModal(todoElement);
     });
 
     const _projectForm = document.getElementById('project-form');
@@ -151,7 +151,7 @@ const controller = (() => {
         document.getElementById('description').value = _editTarget.getDescription();
 
         _isEdit = true;
-        DOM.displayModal('modal-edit-add');
+        View.displayModal('modal-edit-add');
     };
 
     const _grabTodoFromElement = todoElement => {
@@ -171,7 +171,7 @@ const controller = (() => {
         const detailsButtonsListener = todoElement => {
             const todo = _grabTodoFromElement(todoElement);
             _editTarget = todo;
-            DOM.displayDetailsModal(todo);
+            View.displayDetailsModal(todo);
         }
         _setButtonsListeners('todo-details', detailsButtonsListener);
 
@@ -186,7 +186,7 @@ const controller = (() => {
         const deleteButtonsListener = todoElement => {
             _isDeleteTargetTodo = true;
             _deleteTodoTarget = todoElement;
-            DOM.displayModal('modal-delete');
+            View.displayModal('modal-delete');
         }
         _setButtonsListeners('todo-delete', deleteButtonsListener);
     };
@@ -195,7 +195,7 @@ const controller = (() => {
         const deleteProjectButton = document.getElementById('delete-project-button');
         deleteProjectButton.addEventListener('click', () => {
             _isDeleteTargetTodo = false;
-            DOM.displayModal('modal-delete');
+            View.displayModal('modal-delete');
         });
     };
 
@@ -208,10 +208,10 @@ const controller = (() => {
                 const project = Home.getProject(projectId);
                 _currentProject = project;
 
-                DOM.refreshTodos(project);
+                View.refreshTodos(project);
 
                 if (!document.getElementById('delete-project-button')) {
-                    DOM.createDeleteProjectButton();
+                    View.createDeleteProjectButton();
                     _setDeleteProjectButtonListener();
                 }
             }
