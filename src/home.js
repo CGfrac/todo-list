@@ -6,7 +6,7 @@ const home = (() => {
     let _nextProjectId = 1;
 
     const getProject = id => {
-        // if projectId is Home
+        // if id is Home
         if (id === '0') {
             return _proto;
         }
