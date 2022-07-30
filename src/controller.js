@@ -57,7 +57,7 @@ const controller = (() => {
             }
         }
 
-        View.refreshTodos(Home);
+        View.refreshTodos(_currentProject);
 
         form.reset();
 
